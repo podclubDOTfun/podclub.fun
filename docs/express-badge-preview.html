@@ -1,0 +1,197 @@
+<title>Molten Express Badge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap">
+<style>
+  :root{
+    --ground:#07060d; --ground-2:#0d0a1a; --panel:#12101d;
+    --lava-deep:#2b0705; --lava-red:#c81d16; --lava-hot:#ff5a1f;
+    --ember:#ffb020; --ember-core:#ffe0a3;
+    --cool-cyan:#00d0ff; --cool-violet:#7b2ff7;
+    --ink:#efeaf6; --muted:#9a93ad; --hair:rgba(255,255,255,.08);
+    --molten:linear-gradient(180deg,#ffe9a8 0%,#ffb020 20%,#ff5a1f 44%,#c81d16 68%,#7a0d0a 100%);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:
+      radial-gradient(60% 45% at 18% 8%, rgba(123,47,247,.18), transparent 60%),
+      radial-gradient(50% 40% at 92% 96%, rgba(0,208,255,.12), transparent 60%),
+      var(--ground);
+    color:var(--ink);
+    font-family:"Sora",system-ui,sans-serif;
+    line-height:1.55; -webkit-font-smoothing:antialiased;
+    min-height:100vh; padding:clamp(20px,5vw,64px);
+  }
+  .wrap{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:clamp(40px,7vw,84px)}
+  .eyebrow{
+    font-family:"Space Mono",monospace;font-size:.72rem;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--cool-cyan);margin:0 0 10px;
+  }
+  .lede{color:var(--muted);max-width:60ch;margin:12px 0 0;font-size:1rem}
+  h2{font-family:"Sora";font-weight:700;font-size:.82rem;letter-spacing:.16em;
+     text-transform:uppercase;color:var(--muted);margin:0 0 22px}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;border-radius:24px;padding:clamp(40px,8vw,96px) 24px 120px;
+    background:radial-gradient(120% 90% at 50% 6%, rgba(255,90,31,.10), transparent 62%), var(--ground-2);
+    border:1px solid var(--hair);overflow:hidden;text-align:center;
+  }
+  .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:180px;
+    background:radial-gradient(60% 100% at 50% 120%, rgba(255,90,31,.22), transparent 70%);pointer-events:none}
+  .stage{position:relative;display:inline-block}
+  .wordmark{
+    position:relative;z-index:2;font-family:"Anton",sans-serif;
+    font-size:clamp(4.2rem,17vw,12rem);line-height:.9;letter-spacing:.02em;
+    background:var(--molten);-webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 26px rgba(255,90,31,.55)) drop-shadow(0 0 60px rgba(200,29,22,.4));
+    animation:flicker 3.4s ease-in-out infinite;
+  }
+  @keyframes flicker{0%,100%{filter:drop-shadow(0 0 26px rgba(255,90,31,.55)) drop-shadow(0 0 60px rgba(200,29,22,.4))}
+    45%{filter:drop-shadow(0 0 34px rgba(255,120,40,.7)) drop-shadow(0 0 78px rgba(220,40,20,.5))}}
+
+  /* molten drips: a goo-filtered pool that sheds drops under the wordmark */
+  .drips{position:absolute;left:0;right:0;bottom:-6px;height:200px;z-index:1;
+    filter:url(#goo);pointer-events:none}
+  .pool{position:absolute;left:8%;right:8%;bottom:150px;height:26px;border-radius:20px;
+    background:linear-gradient(180deg,#ff7a2e,#c81d16)}
+  .drop{position:absolute;bottom:150px;width:var(--w,26px);height:34px;border-radius:0 0 50% 50%;
+    background:linear-gradient(180deg,#ff7a2e 0%,#e0331a 55%,#7a0d0a 100%);
+    transform-origin:top center;animation:drip var(--d,5s) var(--delay,0s) cubic-bezier(.5,0,.9,.5) infinite}
+  .drop.a{left:22%;--w:30px;--d:5.2s;--delay:.2s}
+  .drop.b{left:46%;--w:22px;--d:6.1s;--delay:1.7s}
+  .drop.c{left:63%;--w:34px;--d:4.6s;--delay:.9s}
+  .drop.d{left:78%;--w:20px;--d:6.8s;--delay:2.9s}
+  @keyframes drip{
+    0%{transform:translateY(0) scaleY(1);opacity:0}
+    12%{opacity:1}
+    55%{transform:translateY(70px) scaleY(1.9)}
+    100%{transform:translateY(150px) scaleY(2.6);opacity:0}
+  }
+
+  /* ---------- VARIATIONS ---------- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+  .card{background:var(--panel);border:1px solid var(--hair);border-radius:18px;
+    padding:30px 22px 24px;display:flex;flex-direction:column;align-items:center;gap:18px;min-height:210px;
+    justify-content:space-between}
+  .card .badge-slot{flex:1;display:flex;align-items:center;justify-content:center;width:100%}
+  .card .label{font-family:"Space Mono",monospace;font-size:.7rem;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--muted);text-align:center}
+  .card .label b{color:var(--ink);display:block;letter-spacing:.06em;margin-bottom:4px;font-size:.82rem}
+
+  /* v1 mini molten drip */
+  .mini{font-family:"Anton";font-size:2.6rem;line-height:.9;letter-spacing:.02em;position:relative;
+    background:var(--molten);-webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 12px rgba(255,90,31,.6))}
+  .mini::after{content:"";position:absolute;left:14%;bottom:-9px;width:14px;height:16px;border-radius:0 0 50% 50%;
+    background:linear-gradient(180deg,#ff7a2e,#7a0d0a);filter:url(#goo);
+    animation:drip 5s .4s cubic-bezier(.5,0,.9,.5) infinite}
+
+  /* v2 ember glow (no drip) */
+  .ember{font-family:"Anton";font-size:2.6rem;letter-spacing:.03em;
+    background:linear-gradient(180deg,#fff2c9,#ffb020 55%,#ff5a1f);-webkit-background-clip:text;background-clip:text;
+    color:transparent;animation:flicker 2.8s ease-in-out infinite;
+    text-shadow:0 0 24px rgba(255,120,40,.5)}
+
+  /* v3 lava plate — inline UI pill */
+  .plate{display:inline-flex;align-items:center;gap:8px;padding:7px 14px 8px;border-radius:11px;
+    font-family:"Anton";font-size:1.05rem;letter-spacing:.09em;line-height:1;
+    background:linear-gradient(180deg,#3a0b06,#160302);
+    border:1px solid rgba(255,90,31,.45);
+    box-shadow:0 0 0 1px rgba(0,0,0,.4),0 8px 24px rgba(200,29,22,.35),inset 0 1px 0 rgba(255,150,80,.35),inset 0 -8px 14px rgba(255,60,20,.28);
+    color:transparent;background-clip:text;-webkit-background-clip:text;position:relative}
+  .plate span{background:linear-gradient(180deg,#ffe9a8,#ff7a2e 60%,#c81d16);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .plate .spark{width:7px;height:7px;border-radius:50%;background:#ff7a2e;
+    box-shadow:0 0 10px 2px rgba(255,90,31,.9);animation:flicker 1.8s ease-in-out infinite}
+
+  /* ---------- IN CONTEXT ---------- */
+  .rows{display:flex;flex-direction:column;gap:12px}
+  .trow{display:flex;align-items:center;gap:14px;background:var(--panel);border:1px solid var(--hair);
+    border-radius:14px;padding:14px 18px}
+  .tok{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-family:"Anton";
+    font-size:1rem;color:#0a0a0f;background:linear-gradient(135deg,#7b2ff7,#00d0ff)}
+  .tname{font-weight:700}
+  .taddr{font-family:"Space Mono",monospace;font-size:.74rem;color:var(--muted)}
+  .grow{flex:1}
+  .basic-tag{font-family:"Space Mono",monospace;font-size:.68rem;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--muted);border:1px solid var(--hair);padding:5px 10px;border-radius:9px}
+  footer{color:var(--muted);font-size:.8rem;text-align:center;border-top:1px solid var(--hair);padding-top:24px}
+  footer b{color:var(--ink)}
+  @media (prefers-reduced-motion:reduce){
+    .wordmark,.ember,.mini,.plate .spark{animation:none}
+    .drop,.mini::after{animation:none;opacity:.9}
+  }
+</style>
+
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <defs>
+    <filter id="goo">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="b"/>
+      <feColorMatrix in="b" mode="matrix"
+        values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -9" result="g"/>
+      <feBlend in="SourceGraphic" in2="g"/>
+    </filter>
+  </defs>
+</svg>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">podclub.fun · tier signal</p>
+    <h1 style="font-family:'Sora';font-weight:700;font-size:clamp(1.5rem,4vw,2.1rem);margin:0;letter-spacing:-.01em">The Express mark, not a checkmark</h1>
+    <p class="lede">The privilege tier reads hot against the cosmic ground — molten <b style="color:var(--ink)">EXPRESS</b> in dark-red-to-black lava, dripping downward. Three treatments below; pick one and it goes into the build brief.</p>
+  </header>
+
+  <section class="hero" aria-label="Express badge, full treatment">
+    <div class="stage">
+      <div class="drips" aria-hidden="true">
+        <div class="pool"></div>
+        <div class="drop a"></div><div class="drop b"></div>
+        <div class="drop c"></div><div class="drop d"></div>
+      </div>
+      <div class="wordmark">EXPRESS</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Three treatments</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="badge-slot"><div class="mini">EXPRESS</div></div>
+        <p class="label"><b>Molten Drip</b>the hero, shrunk — full attitude</p>
+      </div>
+      <div class="card">
+        <div class="badge-slot"><div class="ember">EXPRESS</div></div>
+        <p class="label"><b>Ember Glow</b>fiery font, flicker, no drip — cleaner</p>
+      </div>
+      <div class="card">
+        <div class="badge-slot"><span class="plate"><span class="spark"></span><span>EXPRESS</span></span></div>
+        <p class="label"><b>Lava Plate</b>inline pill — the real in-app size</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>At real size, in the feed</h2>
+    <div class="rows">
+      <div class="trow">
+        <div class="tok">P</div>
+        <div><div class="tname">PEPE</div><div class="taddr">pepe.podclubdotfun.near</div></div>
+        <div class="grow"></div>
+        <span class="plate"><span class="spark"></span><span>EXPRESS</span></span>
+      </div>
+      <div class="trow">
+        <div class="tok" style="background:linear-gradient(135deg,#3a3350,#5a5470)">D</div>
+        <div><div class="tname">DOGE</div><div class="taddr">doge.podclubdotfun.near</div></div>
+        <div class="grow"></div>
+        <span class="basic-tag">Basic</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Both tiers share the root <b>podclubdotfun.near</b>. Express is a fee + perks flag, not a namespace — this badge is where the "wah" lives. <b>Which treatment?</b>
+  </footer>
+</div>
+

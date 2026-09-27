@@ -1,0 +1,19 @@
+[package]
+name = "mock-dcl"
+version = "0.1.0"
+edition = "2021"
+description = "Test-only mock of Ref/Rhea dclv2 concentrated-liquidity DEX. Honors ONLY the interface the podclub router's seed_pool saga calls (storage_deposit, create_pool, ft_on_transfer msg \"Deposit\", non-payable add_liquidity) plus a fail switch to pin the Phase-6a MEDIUM-2 partial-fail path. NOT a faithful DCL."
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+near-sdk = "5"
+
+[profile.release]
+codegen-units = 1
+opt-level = "z"
+lto = true
+debug = false
+panic = "abort"
+overflow-checks = true

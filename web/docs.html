@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Docs — podclub.fun</title>
+<meta name="description" content="How podclub.fun works: fair bonding-curve launches, permanent locked liquidity, and the vision behind the fairest launchpad on NEAR." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html"><img class="logo-img" src="assets/podclub-mark-96.png" alt="" /> podclub.fun</a>
+    <div class="navlinks">
+      <a href="docs.html#lifecycle">How it works</a>
+      <a href="explore.html">Explore</a>
+      <a href="docs.html#trust">Why us</a>
+      <a href="docs.html">Docs</a>
+    </div>
+    <a class="btn btn-primary" href="create.html">Launch a token</a>
+  </div>
+</nav>
+
+<main class="page">
+  <div class="wrap">
+    <div class="eyebrow">Documentation</div>
+    <h2>How podclub.fun works</h2>
+    <p class="lead">A fair-launch protocol on NEAR: every token starts with no presale and no team allocation, discovers its price on a public bonding curve, then graduates into permanent, locked liquidity. This is the whole model, end to end.</p>
+
+    <div class="docs-grid">
+      <aside class="docs-nav">
+        <span class="grp-t">Protocol</span>
+        <a href="#overview">Overview</a>
+        <a href="#lifecycle">Launch lifecycle</a>
+        <a href="#curve">The bonding curve</a>
+        <a href="#graduation">Graduation &amp; locked liquidity</a>
+        <span class="grp-t">Economics</span>
+        <a href="#fees">Fees &amp; creator split</a>
+        <a href="#tiers">Launch tiers</a>
+        <a href="#trading">Trading &amp; slippage</a>
+        <span class="grp-t">Trust</span>
+        <a href="#identity">Token identity</a>
+        <a href="#trust">Trust &amp; transparency</a>
+        <span class="grp-t">About</span>
+        <a href="#vision">Vision &amp; mission</a>
+      </aside>
+
+      <div class="doc" id="content">
+        <article id="overview">
+          <h2>Overview</h2>
+          <p>podclub.fun is a launchpad for creating tradeable tokens on NEAR without writing code, raising a presale, or funding liquidity yourself. You define a name, a ticker and a fee split; you sign one transaction; the protocol handles everything else.</p>
+          <p>Two principles shape every design decision:</p>
+          <ul>
+            <li><b>No head start.</b> There is no presale, no team allocation and no private round. The full supply is available to the open market from the first block.</li>
+            <li><b>Liquidity that cannot be pulled.</b> When a token matures, its liquidity is locked permanently — not by a promise, but by a contract that exposes no way to withdraw it.</li>
+          </ul>
+        </article>
+
+        <article id="lifecycle">
+          <h2>Launch lifecycle</h2>
+          <p>Every token moves through the same four stages. The path is identical for everyone, which is what makes the launch fair.</p>
+          <div class="doc-flow">
+            <div class="n"><div class="s">01 · Create</div><h4>Define</h4><p>Name, ticker, image and a locked fee split. One signed transaction deploys the token.</p></div>
+            <div class="n"><div class="s">02 · Curve</div><h4>Price discovery</h4><p>The token trades on a public bonding curve. Anyone can buy or sell; price moves with demand.</p></div>
+            <div class="n"><div class="s">03 · Graduate</div><h4>Threshold met</h4><p>Once enough real liquidity accumulates, the curve permanently closes.</p></div>
+            <div class="n"><div class="s">04 · Pool</div><h4>Locked liquidity</h4><p>The remaining supply seeds a concentrated-liquidity pool that is locked forever.</p></div>
+          </div>
+          <p>Stages 3 and 4 are irreversible. A graduated token can never return to the curve, and locked liquidity can never be unlocked.</p>
+        </article>
+
+        <article id="curve">
+          <h2>The bonding curve</h2>
+          <p>At launch the entire token supply is placed on a constant-product bonding curve managed by the protocol. Price is set by a formula, not by an order book, so a market exists from the very first buy.</p>
+          <h3>Virtual liquidity</h3>
+          <p>The curve starts with a <b>virtual reserve</b> — a price anchor that gives the token a sensible starting price and depth without anyone depositing capital. Nothing is withdrawable from this virtual reserve; it only shapes the curve. Real value accumulates as people actually trade.</p>
+          <p>Because no real capital is required to open the market, a creator pays only the network's cost to deploy the token. There is no launch fee.</p>
+          <h3>Buying and selling</h3>
+          <ul>
+            <li>Buys move NEAR into the curve and deliver tokens out, in a single atomic transaction.</li>
+            <li>Sells return tokens to the curve and pay out NEAR — but only ever from the <b>real</b> NEAR that buyers have contributed, never from the virtual anchor.</li>
+            <li>A creator may optionally take a small position at launch, <b>capped at 4% of supply</b>, so no insider can accumulate a large stack to dump later.</li>
+          </ul>
+        </article>
+
+        <article id="graduation">
+          <h2>Graduation &amp; locked liquidity</h2>
+          <p>When the real NEAR collected by the curve reaches the graduation threshold, the token <b>graduates</b>. Graduation is permissionless — anyone can trigger it once the threshold is met — and it permanently closes the curve.</p>
+          <p>The remaining token supply is then migrated into a permanent concentrated-liquidity pool on NEAR's Rhea DCL. The liquidity position is held by the protocol contract, which exposes <b>no method to remove or transfer it</b>. The result is liquidity that is locked for the life of the token, enforced by code rather than trust.</p>
+          <div class="callout">
+            <div class="k">Why this matters</div>
+            <p>The single most common way tokens rug is the team pulling liquidity. podclub.fun removes that possibility structurally: there is no withdraw path to call, by anyone, ever.</p>
+          </div>
+        </article>
+
+        <article id="fees">
+          <h2>Fees</h2>
+          <p>podclub.fun charges one flat <b>1% fee</b> on each trade — and that is the only fee. There is no launch fee, no listing fee and no withdrawal fee.</p>
+          <h3>How the creator fee is split</h3>
+          <p>At launch, the creator divides the creator fee across three destinations. The split must total 100% and is <b>locked permanently</b> once the token launches, so buyers can verify it and trust it will never change.</p>
+          <ul>
+            <li><b>Creator fee</b> — claimable NEAR, paid to the creator.</li>
+            <li><b>Buyback &amp; burn</b> — automatically buys the token and burns it, making the supply deflationary.</li>
+            <li><b>Holder rewards</b> — distributed pro-rata to everyone holding the token.</li>
+          </ul>
+          <p>Keep up to <b>100%</b> of the creator fee as claimable NEAR, or route part of it into buyback and holder rewards to strengthen the token — your call, and fixed forever at launch.</p>
+        </article>
+
+        <article id="tiers">
+          <h2>Launch tiers</h2>
+          <p>Every launch uses the same mechanics — the same curve, the same locked liquidity, the same immutable fee split. Tiers only change a launch's starting parameters and how it is featured.</p>
+          <ul>
+            <li><b>Basic</b> — the baseline tier. A standard starting price and depth.</li>
+            <li><b>Express</b> — a premium starting price with deeper initial depth, plus a featured spot in the Express showcase for the first ten minutes after launch.</li>
+          </ul>
+          <p>Independently, the <b>King of the Hill</b> spotlight highlights the token with the strongest momentum right now, rotating on a short window so the board always reflects live activity.</p>
+        </article>
+
+        <article id="trading">
+          <h2>Trading &amp; slippage</h2>
+          <p>Before graduation, trades run against the bonding curve; afterwards they route through the token's locked Rhea pool. Either way, pricing and delivery happen in a single transaction.</p>
+          <h3>Slippage tolerance</h3>
+          <p>Because price moves with every trade, you set a <b>slippage tolerance</b> — the maximum difference you accept between the quoted and executed price. If the market moves beyond it before your transaction lands, the trade reverts instead of filling at a worse price.</p>
+          <ul>
+            <li>Presets: <code>0.1%</code>, <code>0.5%</code>, <code>1%</code>, <code>5%</code> and <code>10%</code> — from tight fills to fast-moving new launches.</li>
+            <li><b>Custom</b> lets you set any value — raise it for fast-moving new launches, lower it to protect against bad fills.</li>
+          </ul>
+          <p>Your setting drives the <b>minimum received</b> amount enforced on-chain.</p>
+        </article>
+
+        <article id="identity">
+          <h2>Token identity</h2>
+          <p>Every token launched through podclub.fun is deployed as a named account under the protocol's namespace — for example <code>pepe.podclubdotfun.near</code>. The <b>.podclubdotfun.near</b> suffix is shared by every genuine launch.</p>
+          <p>This gives two things for free:</p>
+          <ul>
+            <li><b>A consistent, recognizable identity</b> — you can tell a podclub.fun token at a glance.</li>
+            <li><b>Anti-impersonation</b> — only the protocol can create accounts under its namespace, so a copycat cannot mint <code>yourtoken.podclubdotfun.near</code>.</li>
+          </ul>
+        </article>
+
+        <article id="trust">
+          <h2>Trust &amp; transparency</h2>
+          <ul>
+            <li><b>Open source.</b> The contracts are public and built in the open. Anyone can read exactly how launches, fees and graduation work.</li>
+            <li><b>No liquidity removal.</b> Locked liquidity has no withdraw path — verifiable directly in the deployed code.</li>
+            <li><b>Immutable fee split.</b> A token's fee split is fixed at launch and can never be edited afterward.</li>
+            <li><b>No accounts, no tracking.</b> The app reads on-chain data client-side; you connect only to sign.</li>
+          </ul>
+          <p>As the protocol matures toward its final release, the contract's upgrade authority will be locked so that not even the team can alter deployed behavior — the last step from "won't change the rules" to "can't change the rules."</p>
+        </article>
+
+        <article id="vision">
+          <h2>Vision &amp; mission</h2>
+          <div class="mission">
+            <div class="m">
+              <div class="k">Vision</div>
+              <p>A token economy on NEAR where launching is fair by default — where the person with the idea, not the person with early access, is the one who benefits.</p>
+            </div>
+            <div class="m">
+              <div class="k">Mission</div>
+              <p>Give anyone the tools to launch a token in one transaction, with permanent liquidity and the creator fee flowing to the creator — and make every rule enforceable in code, not taken on faith.</p>
+            </div>
+          </div>
+          <p>We believe the fairest launchpad wins by removing the things that make launches unfair: presales, insider allocations, and liquidity that can vanish. podclub.fun is built to be that launchpad on NEAR, and to prove each guarantee on-chain rather than in a pitch.</p>
+        </article>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span class="mono">podclub.fun · fair launches on NEAR</span>
+    <nav class="foot-social" aria-label="Official channels">
+      <a href="https://x.com/PodclubDOTfun" target="_blank" rel="noopener noreferrer" data-social="x" aria-label="podclub.fun on X" title="podclub.fun on X">𝕏</a>
+      <a href="docs.html">Docs</a>
+    </nav>
+    <span>© 2026 · podclub.fun</span>
+  </div>
+</footer>
+<script>
+(function(){
+  try{document.documentElement.style.scrollBehavior='smooth';}catch(e){}
+  var links=[].slice.call(document.querySelectorAll('.docs-nav a[href^="#"]'));
+  var map={};
+  links.forEach(function(a){var id=a.getAttribute('href').slice(1);var s=document.getElementById(id);if(s)map[id]=a;});
+  var sections=Object.keys(map).map(function(id){return document.getElementById(id);});
+  if('IntersectionObserver' in window && sections.length){
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          links.forEach(function(a){a.classList.remove('active');});
+          var a=map[en.target.id]; if(a)a.classList.add('active');
+        }
+      });
+    },{rootMargin:'-45% 0px -50% 0px',threshold:0});
+    sections.forEach(function(s){io.observe(s);});
+  }
+})();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Trade — podclub.fun</title>
+<meta name="description" content="Swap fair-launch NEAR tokens. 1% fee, permanent liquidity, no accounts." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html"><img class="logo-img" src="assets/podclub-mark-96.png" alt="" /> podclub.fun</a>
+    <div class="navlinks">
+      <a href="docs.html#lifecycle">How it works</a>
+      <a href="explore.html">Explore</a>
+      <a href="docs.html#trust">Why us</a>
+      <a href="dashboard.html">Dashboard</a>
+    </div>
+    <button class="btn btn-ghost" data-connect>Connect wallet</button>
+  </div>
+</nav>
+
+<main class="page">
+  <div class="wrap">
+    <div class="eyebrow">Trade</div>
+    <h2 id="pairTitle">Loading launch…</h2>
+    <p class="lead">Every swap prices against the token's bonding curve — permanent, single-sided liquidity, no order book. A flat 1% trading fee funds the creator, holder rewards and the buyback.</p>
+
+    <div class="trade-grid">
+      <div class="panel">
+        <div class="chart-head">
+          <div class="tlogo" id="tLogo"></div>
+          <div>
+            <div class="tkn-name" id="tName">—</div>
+            <div class="tkn-sym" id="tSym">wNEAR pair</div>
+          </div>
+          <div style="margin-left:auto;text-align:right">
+            <div class="tkn-name mono" id="tPx">— <i class="nr"></i></div>
+            <div class="chg" id="tUsd" style="display:inline-block;margin-top:4px">—</div>
+          </div>
+        </div>
+        <svg class="lc-svg" id="tCurve" viewBox="0 0 600 200" preserveAspectRatio="none" aria-hidden="true" style="width:100%;height:150px;margin:4px 0 14px">
+          <path class="lc-area" id="tArea"></path>
+          <path class="lc-stroke" id="tStroke"></path>
+          <circle class="lc-dot" id="tDot" r="3.4"></circle>
+        </svg>
+        <div class="tkn-meta">
+          <div><div class="k">Raised</div><div class="val" id="tRaised">—</div></div>
+          <div><div class="k">Volume total</div><div class="val" id="tVol">—</div></div>
+          <div><div class="k">Market cap</div><div class="val" id="tMcap">—</div></div>
+          <div><div class="k">Progress</div><div class="val accent" id="tProg">—</div></div>
+        </div>
+        <div class="tkn-meta">
+          <div><div class="k">Total supply</div><div class="val" id="tSupply">—</div></div>
+          <div><div class="k">Fees collected</div><div class="val" id="tFees">—</div></div>
+          <div><div class="k">Burned 🔥</div><div class="val" id="tBurned">—</div></div>
+          <div><div class="k">Supply after burn</div><div class="val accent" id="tNet">—</div></div>
+        </div>
+        <div class="holders">
+          <div class="holders-head">
+            <span class="k">Holder distribution</span>
+            <span class="hint" id="hHint">—</span>
+          </div>
+          <div class="hbar">
+            <span class="h-lp" id="hbLp"></span>
+            <span class="h-top" id="hbTop"></span>
+            <span class="h-mid" id="hbMid"></span>
+            <span class="h-rest" id="hbRest"></span>
+          </div>
+          <div class="hleg">
+            <div class="row"><span class="dot h-lp"></span> Liquidity pool <b id="hLp">—</b></div>
+            <div class="row"><span class="dot h-top"></span> Top 10 holders <b id="hTop">—</b></div>
+            <div class="row"><span class="dot h-mid"></span> Next 11–100 <b id="hMid">—</b></div>
+            <div class="row"><span class="dot h-rest"></span> Everyone else <b id="hRest">—</b></div>
+          </div>
+        </div>
+        <div class="scanrow" id="socialRow">
+          <span class="k">Community</span>
+          <a class="scan" id="soX" href="#" target="_blank" rel="noopener noreferrer" title="X" aria-label="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+          <a class="scan" id="soTg" href="#" target="_blank" rel="noopener noreferrer" title="Telegram" aria-label="Telegram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg></a>
+          <a class="scan" id="soDc" href="#" target="_blank" rel="noopener noreferrer" title="Discord" aria-label="Discord"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.11 13.11 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></a>
+          <a class="scan" id="soWeb" href="#" target="_blank" rel="noopener noreferrer" title="Website" aria-label="Website"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></a>
+        </div>
+        <div class="scanrow" id="scanRow">
+          <span class="k">View on</span>
+          <a class="scan" id="scDex" href="#" target="_blank" rel="noopener noreferrer" title="DexScreener" aria-label="DexScreener" style="display:none"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13h4v7H4zM10 4h4v16h-4zM16 9h4v11h-4z"/></svg></a>
+          <a class="scan" id="scGecko" href="#" target="_blank" rel="noopener noreferrer" title="GeckoTerminal" aria-label="GeckoTerminal" style="display:none"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 18.5l6-6 4 4L22 6.92 20.59 5.5l-7.09 7.09-4-4L2 16.99z"/></svg></a>
+          <a class="scan" id="scRhea" href="#" target="_blank" rel="noopener noreferrer" title="Rhea" aria-label="Rhea" style="display:none"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></a>
+          <a class="scan" id="scExp" href="#" target="_blank" rel="noopener noreferrer" title="NEAR Explorer" aria-label="NEAR Explorer" style="display:none"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.991.991 0 0 1 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.32.17.53.5.53.88v9zM12 4.15L5.04 8 12 11.85 18.96 8 12 4.15z"/></svg></a>
+        </div>
+      </div>
+
+      <div class="panel swap">
+        <div class="swap-title"><h3>Swap</h3><span class="bbtag" id="sideTag">BUY</span></div>
+        <div class="swfield">
+          <div class="top"><span id="fromLbl">You pay</span><span>balance: —</span></div>
+          <div class="swap-row">
+            <input class="swap-amt" id="fromAmt" placeholder="0.0" inputmode="decimal" />
+            <span class="asset" id="fromAsset"><span class="d"><i class="nr"></i></span> wNEAR</span>
+          </div>
+        </div>
+        <div class="swap-mid"><button class="arr" id="flip" title="Flip direction">↓</button></div>
+        <div class="swfield">
+          <div class="top"><span>You receive (est.)</span><span id="slipInline">slippage 1%</span></div>
+          <div class="swap-row">
+            <input class="swap-amt" id="toAmt" placeholder="0.0" readonly />
+            <span class="asset" id="toAsset"><span class="d"></span> —</span>
+          </div>
+        </div>
+        <div class="slip">
+          <div class="slip-lab"><span>Slippage tolerance</span><b class="cur" id="slipVal">1%</b></div>
+          <div class="slip-opts" id="slipOpts">
+            <button type="button" data-slip="0.1">0.1%</button>
+            <button type="button" data-slip="0.5">0.5%</button>
+            <button type="button" class="on" data-slip="1">1%</button>
+            <button type="button" data-slip="5">5%</button>
+            <button type="button" data-slip="10">10%</button>
+            <button type="button" data-slip="custom">Custom</button>
+            <div class="slip-custom" id="slipCustom" style="display:none">
+              <input id="slipInp" inputmode="decimal" placeholder="1.0" maxlength="5" />
+              <span class="pc">%</span>
+            </div>
+          </div>
+          <div class="slip-warn" id="slipWarn"></div>
+        </div>
+        <div class="sd">
+          <div class="row"><span>Rate</span><b id="rateVal">—</b></div>
+          <div class="row"><span>Trading fee (1%)</span><b id="feeVal">—</b></div>
+          <div class="row"><span>Min. received</span><b id="minVal">—</b></div>
+          <div class="row"><span>Route</span><b>Bonding curve · direct</b></div>
+        </div>
+        <button class="btn btn-primary" id="swapBtn" style="width:100%">Connect wallet to swap</button>
+        <div class="note" id="swapMsg" style="display:none"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span class="mono">podclub.fun · fair launches on NEAR</span>
+    <nav class="foot-social" aria-label="Official channels">
+      <a href="https://x.com/PodclubDOTfun" target="_blank" rel="noopener noreferrer" data-social="x" aria-label="podclub.fun on X" title="podclub.fun on X">𝕏</a>
+      <a href="docs.html">Docs</a>
+    </nav>
+    <span>© 2026 · podclub.fun</span>
+  </div>
+</footer>
+<script type="module" src="wallet.js"></script>
+<script src="api.js"></script>
+<script src="price.js"></script>
+<script>
+(function(){
+  var NR='<i class="nr"></i>';
+  var g=function(id){return document.getElementById(id);};
+  var YOCTO=1000000000000000000000000n; // 1e24
+  var tokenId=new URLSearchParams(location.search).get('t')||'';
+  var L=null, side='buy', SLIP=1, quoteTimer=null, NEARLBL, TOKLBL;
+
+  function toNear(y){try{return Number(BigInt(y)/1000000000000000000n)/1e6;}catch(e){return null;}}
+  function fmtN(n,d){if(n==null||!isFinite(n))return '—';return n.toLocaleString('en-US',{maximumFractionDigits:d==null?4:d});}
+  function fmtPx(v){if(v==null||!isFinite(v))return '—';return v<0.01?v.toPrecision(3):v<1?v.toFixed(4):fmtN(v,3);}
+  function compact(n){if(n==null||!isFinite(n))return '—';if(n>=1e9)return fmtN(n/1e9,2)+'B';if(n>=1e6)return fmtN(n/1e6,2)+'M';if(n>=1e3)return fmtN(n/1e3,2)+'K';return fmtN(n,2);}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function toYocto(whole){ // decimal string → yocto BigInt string (24 decimals)
+    var s=String(whole==null?'':whole).trim(); if(!s)return '0';
+    if(s[0]==='-')s=s.slice(1);
+    var parts=s.split('.'),int=parts[0]||'0',frac=(parts[1]||'').slice(0,24);
+    while(frac.length<24)frac+='0';
+    try{return (BigInt(int||'0')*YOCTO+BigInt(frac||'0')).toString();}catch(e){return '0';}
+  }
+  function assetLabels(){
+    NEARLBL='<span class="d">'+NR+'</span> wNEAR';
+    TOKLBL='<span class="d">'+esc(((L&&L.symbol)||'?').slice(0,1))+'</span> '+esc((L&&L.symbol)||'');
+  }
+
+  // Real constant-product bonding curve: price(r) = (virtual_near + r)^2 / k, k invariant.
+  function drawCurve(){
+    var stroke=g('tStroke'),area=g('tArea'),dot=g('tDot'); if(!L||!stroke)return;
+    var virt=toNear(L.virtual_near),real=toNear(L.real_near),res=toNear(L.token_reserve),grad=toNear(L.graduation_near);
+    var k=(virt+real)*res, W=600,H=200,N=64,ys=[],pts=[];
+    if(!(k>0)||!(grad>0)){stroke.setAttribute('d','');area.setAttribute('d','');dot.removeAttribute('cx');return;}
+    for(var i=0;i<N;i++){var r=grad*i/(N-1);ys.push((virt+r)*(virt+r)/k);}
+    var mn=Math.min.apply(null,ys),mx=Math.max.apply(null,ys),rng=(mx-mn)||1;
+    for(var j=0;j<N;j++)pts.push([j/(N-1)*W,H-6-((ys[j]-mn)/rng)*(H-16)]);
+    var d=pts.map(function(p,i){return (i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1);}).join(' ');
+    stroke.setAttribute('d',d); area.setAttribute('d',d+' L'+W+' '+H+' L0 '+H+' Z');
+    stroke.style.stroke='var(--accent)'; area.style.fill='rgba(0,236,151,.12)';
+    var frac=Math.min(real/grad,1),curP=(virt+real)*(virt+real)/k;
+    dot.setAttribute('cx',(frac*W).toFixed(1)); dot.setAttribute('cy',(H-6-((curP-mn)/rng)*(H-16)).toFixed(1)); dot.style.fill='var(--accent)';
+  }
+
+  function renderInfo(){
+    var sym=L.symbol||'', spot=L.spot_price==null?null:parseFloat(L.spot_price);
+    g('pairTitle').textContent='Swap $'+sym;
+    g('tName').textContent=L.name||''; g('tSym').textContent='$'+sym+' · wNEAR pair';
+    g('tLogo').textContent=(sym||'?').slice(0,1);
+    g('tPx').innerHTML=fmtPx(spot)+' '+NR;
+    var usd=(window.FLPrice&&spot!=null)?FLPrice.nearToUsd(spot):null;
+    g('tUsd').textContent=usd!=null?usd:'—';
+    g('tRaised').innerHTML=fmtN(toNear(L.real_near),2)+' '+NR;
+    g('tVol').innerHTML=compact(toNear(L.volume))+' '+NR;
+    var supply=toNear(L.on_curve_supply), mcap=(spot!=null&&supply!=null)?spot*supply:null;
+    g('tMcap').innerHTML=mcap!=null?compact(mcap)+' '+NR:'—';
+    g('tProg').textContent=((L.progress_bps||0)/100).toFixed(1)+'%';
+    g('tSupply').textContent=compact(supply);
+    g('tFees').innerHTML=L.fees_collected!=null?fmtN(toNear(L.fees_collected),2)+' '+NR:'—';
+    var burned=L.burned!=null?toNear(L.burned):null;
+    g('tBurned').textContent=burned!=null?compact(burned):'—';
+    g('tNet').textContent=supply!=null?compact(burned!=null?supply-burned:supply):'—';
+    g('rateVal').innerHTML=(spot!=null&&spot>0)?('1 '+NR+' ≈ '+compact(1/spot)+' '+esc(sym)):'—';
+    // Holder distribution is not exposed on-chain → hide rather than fabricate.
+    var hb=document.querySelector('.holders'); if(hb)hb.style.display='none';
+    var smap={soX:'x',soTg:'telegram',soDc:'discord',soWeb:'website'},any=false,soc=L.socials||{};
+    Object.keys(smap).forEach(function(id){var el=g(id);if(!el)return;var u=soc[smap[id]];if(u){el.href=/^https?:\/\//i.test(u)?u:'https://'+u;any=true;}else el.style.display='none';});
+    var srow=g('socialRow'); if(srow&&!any)srow.style.display='none';
+    // Explorer link is always valid (the token is a real on-chain account). DEX/aggregator links
+    // only make sense once the curve graduates to a public pool — hide them until then rather than
+    // sending "View on DexScreener" for $SYM to a generic landing page that can't index a testnet
+    // bonding-curve token.
+    var net=(window.FLWallet&&FLWallet.NETWORK)||'testnet';
+    var nbHost=net==='mainnet'?'https://nearblocks.io':'https://testnet.nearblocks.io';
+    var exp=g('scExp'); if(exp){ exp.href=nbHost+'/address/'+encodeURIComponent(L.token_id); exp.style.display=''; }
+    var graduated=/graduat|pool/i.test(L.phase||'');
+    var dexUrls={ scDex:'https://dexscreener.com/near/'+encodeURIComponent(L.token_id), scGecko:'https://www.geckoterminal.com/near/pools/'+encodeURIComponent(L.token_id), scRhea:'https://rhea.finance' };
+    Object.keys(dexUrls).forEach(function(id){ var el=g(id); if(!el)return; if(graduated){ el.href=dexUrls[id]; el.style.display=''; } else el.style.display='none'; });
+    g('toAsset').innerHTML=TOKLBL;
+    drawCurve();
+  }
+
+  // Live swap preview straight from the curve (quote_buy / quote_sell) — real reads, never faked.
+  async function quote(){
+    var from=g('fromAmt'),to=g('toAmt'),fee=g('feeVal'),min=g('minVal');
+    var v=parseFloat(from.value)||0, sym=(L&&L.symbol)||'';
+    if(!L||!(v>0)){to.value='';fee.textContent='—';min.textContent='—';return;}
+    try{
+      var out,outUnit,feeUnit;
+      if(side==='buy'){ out=toNear(await FLApi.quoteBuy(L.token_id,toYocto(v))); outUnit=' '+esc(sym); feeUnit=' '+NR; }
+      else            { out=toNear(await FLApi.quoteSell(L.token_id,toYocto(v))); outUnit=' '+NR; feeUnit=' '+esc(sym); }
+      to.value=out!=null?fmtN(out,side==='buy'?2:6):'';
+      fee.innerHTML=fmtN(v*0.01,6)+feeUnit;
+      min.innerHTML=out!=null?(fmtN(out*(1-SLIP/100),side==='buy'?2:6)+outUnit):'—';
+    }catch(e){ to.value=''; fee.textContent='—'; min.textContent='quote unavailable'; }
+  }
+  function scheduleQuote(){clearTimeout(quoteTimer);quoteTimer=setTimeout(quote,300);}
+  g('fromAmt').addEventListener('input',scheduleQuote);
+
+  (function(){
+    var opts=g('slipOpts'),custom=g('slipCustom'),inp=g('slipInp'),val=g('slipVal'),inline=g('slipInline'),warn=g('slipWarn');
+    function fmt(n){return (Math.round(n*100)/100)+'%';}
+    function warnFor(s){ if(!(s>0))return 'Enter a slippage above 0%.'; if(s<0.1)return 'Very low — the trade may fail if the price moves at all.'; if(s>10)return 'High — you may receive noticeably less than quoted.'; return ''; }
+    function apply(s){ SLIP=s; val.textContent=fmt(s); if(inline)inline.textContent='slippage '+fmt(s); var w=warnFor(s); warn.textContent=w; warn.classList.toggle('on',!!w); scheduleQuote(); }
+    opts.addEventListener('click',function(e){
+      var b=e.target.closest('button'); if(!b)return;
+      [].forEach.call(opts.querySelectorAll('button'),function(x){x.classList.remove('on');});
+      b.classList.add('on');
+      if(b.dataset.slip==='custom'){ custom.style.display='flex'; custom.classList.add('on'); inp.focus(); var s=parseFloat(inp.value); apply(isNaN(s)?SLIP:s); }
+      else{ custom.style.display='none'; custom.classList.remove('on'); apply(parseFloat(b.dataset.slip)); }
+    });
+    inp.addEventListener('input',function(){ var s=parseFloat(inp.value); if(!isNaN(s))apply(s); else {warn.textContent='';warn.classList.remove('on');} });
+  })();
+
+  g('flip').addEventListener('click',function(){
+    side=side==='buy'?'sell':'buy';
+    g('sideTag').textContent=side.toUpperCase();
+    g('fromAsset').innerHTML=side==='buy'?NEARLBL:TOKLBL;
+    g('toAsset').innerHTML=side==='buy'?TOKLBL:NEARLBL;
+    g('fromAmt').value='';g('toAmt').value='';quote();
+  });
+
+  var btn=g('swapBtn'),msg=g('swapMsg');
+  function refresh(){ btn.textContent = (window.FLWallet&&FLWallet.get()) ? 'Swap' : 'Connect wallet to swap'; }
+  window.addEventListener('fl:wallet',refresh); refresh();
+  btn.addEventListener('click',function(){
+    if(!(window.FLWallet&&FLWallet.get())){FLWallet.open();return;}
+    msg.style.display='flex';
+    msg.textContent='Preview is live from the curve. Signing is not wired yet — next: wallet-selector → '+(side==='buy'?'router.buy(token_id, min_out) with attached wNEAR':'ft_transfer_call(token, quote_sell → min_out)')+'.';
+  });
+
+  (async function(){
+    if(!tokenId){ g('pairTitle').textContent='Pick a launch'; msg.style.display='flex'; msg.textContent='No token selected — open a launch from Explore.'; return; }
+    try{
+      L=await FLApi.launch(tokenId);
+      if(!L){ g('pairTitle').textContent='Unknown token'; msg.style.display='flex'; msg.textContent='No launch found for '+esc(tokenId)+' on '+FLApi.CONTRACT_ID+'.'; return; }
+      assetLabels(); g('fromAsset').innerHTML=NEARLBL; renderInfo();
+    }catch(e){ msg.style.display='flex'; msg.textContent='Couldn’t reach the network to load this launch.'; }
+  })();
+  window.addEventListener('fl:price',function(){ if(L)renderInfo(); });
+})();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

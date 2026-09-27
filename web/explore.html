@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Explore launches — podclub.fun</title>
+<meta name="description" content="Live fair-launch tokens on NEAR — price, volume and holders, pulled client-side." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html"><img class="logo-img" src="assets/podclub-mark-96.png" alt="" /> podclub.fun</a>
+    <div class="navlinks">
+      <a href="docs.html#lifecycle">How it works</a>
+      <a href="explore.html">Explore</a>
+      <a href="docs.html#trust">Why us</a>
+      <a href="dashboard.html">Dashboard</a>
+    </div>
+    <a class="btn btn-primary" href="create.html">Launch a token</a>
+  </div>
+</nav>
+
+<main class="page">
+  <div class="wrap">
+    <div class="eyebrow">Explore</div>
+    <h2>Live launches on NEAR</h2>
+    <p class="lead">Every token launched through podclub.fun — full supply in a permanent pool, no presale. Prices, bonding progress and volume are read live from the router's on-chain view methods. No accounts, no tracking.</p>
+
+    <div class="koth" id="koth"></div>
+
+    <div class="toolbar">
+      <div class="search"><input class="inp" id="q" placeholder="Search name or ticker…" /></div>
+      <div class="tabs" id="tabs">
+        <button class="tab on" data-sort="new">Newest</button>
+        <button class="tab" data-sort="progress"><span class="flame flame-sm" aria-hidden="true"></span>Closest to graduation</button>
+        <button class="tab" data-sort="volume">Most volume</button>
+      </div>
+    </div>
+
+    <div class="feed" id="feed"><div class="empty">Loading launches…</div></div>
+    <div class="note" id="feedNote"></div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span class="mono">podclub.fun · fair launches on NEAR</span>
+    <nav class="foot-social" aria-label="Official channels">
+      <a href="https://x.com/PodclubDOTfun" target="_blank" rel="noopener noreferrer" data-social="x" aria-label="podclub.fun on X" title="podclub.fun on X">𝕏</a>
+      <a href="docs.html">Docs</a>
+    </nav>
+    <span>© 2026 · podclub.fun</span>
+  </div>
+</footer>
+<script src="api.js"></script>
+<script src="price.js"></script>
+<script>
+(function(){
+  var SOCIAL_ICONS={
+    x:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>',
+    tg:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg>',
+    dc:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.11 13.11 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>',
+    web:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>'
+  };
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function safeUrl(u){u=(u||'').trim();if(!u)return'';return /^https?:\/\//i.test(u)?u:'https://'+u;}
+  function socialRow(s){
+    if(!s)return '';
+    var items=[],map=[['x','x','X'],['telegram','tg','Telegram'],['discord','dc','Discord'],['website','web','Website']];
+    map.forEach(function(m){var u=safeUrl(s[m[0]]);if(u)items.push('<a href="'+esc(u)+'" target="_blank" rel="noopener noreferrer" title="'+m[2]+'" aria-label="'+m[2]+'">'+SOCIAL_ICONS[m[1]]+'</a>');});
+    return items.length?'<div class="tkn-social">'+items.join('')+'</div>':'';
+  }
+  // yocto wNEAR → short display string (real value; "—" if missing).
+  function nearStr(y,max){
+    if(y==null)return '—';
+    try{var n=Number(BigInt(y)/1000000000000000000n)/1e6;return n.toLocaleString('en-US',{maximumFractionDigits:max==null?4:max});}catch(e){return '—';}
+  }
+  // spot price is wNEAR per whole token (decimal string). Render USD when a live NEAR price exists.
+  function priceUsd(spot){
+    if(spot==null||!window.FLPrice)return null;
+    var u=FLPrice.nearToUsd(parseFloat(spot));
+    return u;
+  }
+  var PHASE={Seeding:'Seeding',Live:'Live',Graduated:'Graduated',Pooling:'Pooling',Pooled:'Pooled'};
+
+  function card(l){
+    var sym=esc(l.symbol),age=FLApi.ageFrom(l.created_at);
+    var prog=(l.progress_bps||0)/100;
+    var usd=priceUsd(l.spot_price);
+    var vol=l.volume_24h!=null?nearStr(l.volume_24h,0):nearStr(l.volume,0);
+    var volLbl=l.volume_24h!=null?'Volume 24h':'Volume total';
+    return '<div class="tkn" data-href="trade.html?t='+encodeURIComponent(l.token_id)+'" role="link" tabindex="0">'
+      +'<div class="tkn-head"><div class="tlogo">'+esc((l.symbol||'?').slice(0,1))+'</div>'
+      +'<div><div class="tkn-name">'+esc(l.name)+'</div><div class="tkn-sym">$'+sym+(age?' · '+age:'')+' · <span class="phase">'+esc(PHASE[l.phase]||l.phase)+'</span></div></div></div>'
+      +'<div class="tkn-price"><span class="p">'+nearStr(l.spot_price,8)+' <i class="nr" style="color:var(--faint)"></i></span>'
+      +'<span class="chg">'+(usd!=null?esc(usd):'—')+'</span></div>'
+      +'<div class="prog"><div class="prog-bar"><span style="width:'+prog+'%"></span></div><div class="prog-lab">'+prog.toFixed(1)+'% to graduation</div></div>'
+      +'<div class="tkn-stats"><div><span>'+volLbl+'</span>'+vol+' <i class="nr"></i></div>'
+      +'<div style="text-align:right"><span>Raised</span>'+nearStr(l.real_near,2)+' <i class="nr"></i></div></div>'
+      +socialRow(l.socials)+'</div>';
+  }
+
+  function renderKing(king){
+    var koth=document.getElementById('koth'); if(!koth)return;
+    if(king==null){ // view not available on the deployed router — say so, don't fake a king
+      koth.className='koth';
+      koth.innerHTML='<div class="koth-in koth-empty"><div class="eyebrow">King of the Hill</div><div class="note" style="margin:0">Leaderboard activates once the ranking view is live on the router.</div></div>';
+      return;
+    }
+    if(!king.length){koth.style.display='none';return;}
+    var t=king[0];
+    koth.innerHTML='<div class="koth-in">'
+      +'<div class="koth-crown">👑</div>'
+      +'<div class="koth-logo">'+esc((t.symbol||'?').slice(0,1))+'</div>'
+      +'<div class="koth-id"><div class="eyebrow">King of the Hill</div>'
+      +'<div class="koth-name">'+esc(t.name)+'</div>'
+      +'<div class="koth-sym">$'+esc(t.symbol)+' · '+FLApi.ageFrom(t.created_at)+'</div></div>'
+      +'<div class="koth-stats">'
+      +'<div class="koth-stat"><div class="k">Progress</div><div class="v" style="color:var(--accent)">'+((t.progress_bps||0)/100).toFixed(1)+'%</div></div>'
+      +'<div class="koth-stat"><div class="k">Raised</div><div class="v">'+nearStr(t.real_near,1)+' <i class="nr"></i></div></div>'
+      +'<div class="koth-stat"><div class="k">Goal</div><div class="v">'+nearStr(t.graduation_near,0)+' <i class="nr"></i></div></div>'
+      +'<a class="btn btn-primary" href="trade.html?t='+encodeURIComponent(t.token_id)+'">Trade →</a>'
+      +'</div>'
+      +'<div class="koth-fire" aria-hidden="true">'+Array(9).join('<span class="flame"></span>')+'</div>';
+  }
+
+  var feed=document.getElementById('feed'),note=document.getElementById('feedNote'),q=document.getElementById('q'),sort='new';
+  var ALL=[];
+  function bignum(y){try{return BigInt(y||0);}catch(e){return 0n;}}
+  function render(){
+    var list=ALL.slice(),term=(q.value||'').toLowerCase();
+    if(term)list=list.filter(function(l){return ((l.name||'')+(l.symbol||'')).toLowerCase().indexOf(term)>-1;});
+    if(sort==='progress')list.sort(function(a,b){return (b.progress_bps||0)-(a.progress_bps||0);});
+    else if(sort==='volume')list.sort(function(a,b){var d=bignum(b.volume)-bignum(a.volume);return d>0n?1:d<0n?-1:0;});
+    else list.sort(function(a,b){return Number(b.created_at||0)-Number(a.created_at||0);}); // newest
+    feed.innerHTML=list.length?list.map(card).join(''):'<div class="empty">'+(term?'No tokens match “'+esc(term)+'”.':'No launches yet — be the first to <a href="create.html">launch a token</a>.')+'</div>';
+  }
+  function refreshUsd(){ if(ALL.length)render(); } // re-render prices when a live NEAR quote lands
+  window.addEventListener('fl:price',refreshUsd);
+
+  q.addEventListener('input',render);
+  feed.addEventListener('click',function(e){
+    if(e.target.closest('.tkn-social'))return;
+    var c=e.target.closest('.tkn'); if(c&&c.dataset.href)location.href=c.dataset.href;
+  });
+  feed.addEventListener('keydown',function(e){
+    if(e.key!=='Enter'&&e.key!==' ')return;
+    var c=e.target.closest('.tkn'); if(c&&c.dataset.href){e.preventDefault();location.href=c.dataset.href;}
+  });
+  document.getElementById('tabs').addEventListener('click',function(e){
+    var b=e.target.closest('.tab'); if(!b)return;
+    [].forEach.call(this.children,function(c){c.classList.remove('on')});
+    b.classList.add('on'); sort=b.dataset.sort; render();
+  });
+
+  // ---- load real on-chain data ----
+  (async function(){
+    try{ renderKing(await FLApi.king()); }catch(e){ /* leave koth empty on error, never fake */ }
+    try{
+      ALL=await FLApi.launches();
+      render();
+      note.textContent=ALL.length?('Live from '+FLApi.CONTRACT_ID+' · '+ALL.length+' launch'+(ALL.length===1?'':'es')+'. Prices are on-curve spot; 24h volume appears once the indexer has a day of history.'):'';
+    }catch(e){
+      feed.innerHTML='<div class="empty">Couldn’t reach the network to load launches. Refresh to retry.</div>';
+      note.textContent='';
+    }
+  })();
+})();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

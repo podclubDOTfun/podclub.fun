@@ -1,0 +1,7 @@
+
+# private-beta access codes (never commit)
+beta-codes.txt
+.beta-codes-joined
+
+# Rust build output
+target/

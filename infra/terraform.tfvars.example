@@ -1,0 +1,7 @@
+# Copy to terraform.tfvars (gitignored) and fill in. NEVER commit the real access_code.
+# Alternatively export TF_VAR_access_code in your shell and omit it here.
+
+domain_name    = "beta.example.com"
+hosted_zone_id = "Z0000000000000000000"
+access_user    = "beta"
+# access_code  = "set-me-via-TF_VAR_access_code-or-an-untracked-tfvars"

@@ -1,0 +1,10 @@
+# Terraform / local state — never commit
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+crash.log
+
+# Secrets: real variable values (the shared access code lives here)
+*.tfvars
+!terraform.tfvars.example

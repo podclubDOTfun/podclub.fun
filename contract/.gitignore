@@ -1,0 +1,2 @@
+# Rust build artifacts (wasm is rebuilt on demand)
+/target

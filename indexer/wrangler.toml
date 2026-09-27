@@ -1,0 +1,47 @@
+# podclub.fun read-path — Cloudflare Worker (indexer + /api/* read endpoints).
+#
+# This Worker does two jobs (Cloudflare runs both from one script):
+#   1. scheduled(): polls the NEAR router's VIEW methods over public RPC and writes a
+#      denormalized snapshot to KV. No private keys, no signing — read-only.
+#   2. fetch(): serves read-only /api/* JSON from that KV snapshot to the static frontend.
+#
+# NOTHING here originates prices/balances/fees — every value is a copy of on-chain state.
+# Deploy needs a Cloudflare API token + the KV namespace id.
+name = "podclub-indexer"
+main = "src/index.js"
+compatibility_date = "2024-09-23"
+
+# Poll the chain every minute. The frontend reads the cached snapshot, not the chain directly,
+# so trader page loads never fan out N RPC calls.
+[triggers]
+crons = ["* * * * *"]
+
+# Public config (safe to commit — no secrets). Swap CONTRACT_ID when a stable/mainnet router
+# account is chosen. RPC_URL is a public endpoint.
+[vars]
+CONTRACT_ID = "flpad-28720.testnet"
+RPC_URL = "https://test.rpc.fastnear.com"
+# CORS allow-list for the browser API. "*" is fine for public read-only data; tighten to the
+# Pages origin at mainnet if desired.
+ALLOW_ORIGIN = "*"
+
+# KV holds the snapshot blobs. Create with:
+#   npx wrangler kv namespace create SNAPSHOT
+# then paste the returned id below (and a preview_id for `wrangler dev`).
+[[kv_namespaces]]
+binding = "SNAPSHOT"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"        # set to your KV namespace id
+preview_id = "REPLACE_WITH_KV_PREVIEW_ID"
+
+# Opt-in testnet E2E target: `wrangler deploy --env testnet` polls a throwaway testnet router
+# instead of the default above, without changing the committed prod default. The id below is the
+# ephemeral 2026-09-26e seed_pool-proof router and will disappear — swap as needed.
+[env.testnet.vars]
+CONTRACT_ID = "pdc-sp-100ca0.testnet"
+RPC_URL = "https://test.rpc.fastnear.com"
+ALLOW_ORIGIN = "*"
+
+[[env.testnet.kv_namespaces]]
+binding = "SNAPSHOT"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
+preview_id = "REPLACE_WITH_KV_PREVIEW_ID"

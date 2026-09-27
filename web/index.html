@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>podclub.fun — Fair-launch tokens on NEAR</title>
+<meta name="description" content="Fair-launch tokens on NEAR. One transaction, permanent liquidity, up to 100% of the creator fee to creators." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top"><img class="logo-img" src="assets/podclub-mark-96.png" alt="" /> podclub.fun</a>
+    <a class="btn btn-primary" href="create.html">Launch a token</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="tag">Live on NEAR testnet</span>
+      <h1>Launch a token that <span class="grad">can't be rugged.</span><span class="blink-cur"></span></h1>
+      <p class="sub">Locked by code, not promises. One transaction deploys a fair-launch token with permanent liquidity — and you keep up to <b class="accent">100%</b> of the creator fee. No presale, no team allocation, no mint key.</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="create.html">Launch your token →</a>
+        <a class="btn btn-ghost" href="#live">Explore launches</a>
+      </div>
+      <ul class="rug-points" aria-label="Why it can't be rugged">
+        <li><b>Keyless token</b> — no mint, no owner, no upgrade key</li>
+        <li><b>100% supply on the curve</b> — no presale, no team bag</li>
+        <li><b>LP locked at graduation</b> — no remove-liquidity path</li>
+        <li><b>Dev buy capped 4%</b> · <b>upgrade key renounced</b> at mainnet</li>
+      </ul>
+      <div class="trust">
+        <span><b>up to 100%</b> to you</span>
+        <span><b>0.18 <i class="nr"></i></b> flat to launch</span>
+        <span><b>100%</b> supply in pool</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <span class="card-title">// new_launch.near</span>
+        <span class="tag">fair launch</span>
+      </div>
+      <div class="field"><label>Token name</label><div class="box">Comet <span class="ph mono">CMET</span></div></div>
+      <div class="split">
+        <div class="field"><label>Supply</label><div class="box mono">1,000,000,000</div></div>
+        <div class="field"><label>Pair</label><div class="box mono">wNEAR</div></div>
+      </div>
+      <div class="field"><label>Trading fee</label><div class="box"><span class="mono accent">1%</span><span class="ph mono">flat · per trade</span></div></div>
+      <div class="slider-row">
+        <div class="lab"><span>CREATOR FEE · SPLIT 3 WAYS</span><b class="accent">up to 100%</b></div>
+        <div class="alloc-bar" style="margin:2px 0 12px"><span class="seg seg-c" style="width:70%"></span><span class="seg seg-b" style="width:20%"></span><span class="seg seg-h" style="width:10%"></span></div>
+        <div class="slider-hint"><span class="mono accent">70%</span> creator fee · <span class="mono" style="color:var(--violet)">20%</span> buyback&amp;burn · <span class="mono" style="color:#f5b544">10%</span> holder rewards — set at launch, locked forever.</div>
+      </div>
+      <div style="margin:16px 0 6px">
+        <div class="meta-row"><span>Liquidity</span><b>Permanent · locked</b></div>
+        <div class="meta-row"><span>Launch fee</span><b>0.18 <i class="nr"></i> · flat</b></div>
+        <div class="meta-row"><span>Deploys in</span><b>1 signed tx</b></div>
+      </div>
+      <a class="btn btn-primary" style="width:100%;margin-top:8px" href="create.html">Sign &amp; launch</a>
+    </div>
+  </div>
+</header>
+<nav class="subnav" aria-label="Sections">
+  <div class="wrap">
+    <a href="#live">Live launches</a>
+    <a href="explore.html">Explore</a>
+    <a href="docs.html#lifecycle">How it works</a>
+    <a href="docs.html">Docs</a>
+  </div>
+</nav>
+<section class="blk" id="live">
+  <div class="wrap">
+    <div class="eyebrow">Live launches</div>
+    <h2>Tokens going live right now.</h2>
+    <p class="lead">Prices, volume and bonding progress are read client-side from the router's on-chain view methods — no accounts, no tracking. Pick a launch to see its real bonding curve.</p>
+    <div class="live-grid">
+      <div class="livechart">
+        <div class="lc-head">
+          <span class="tlogo" id="lcIc"></span>
+          <div class="lc-id"><div class="tkn-name" id="lcName">Loading…</div><div class="tkn-sym mono" id="lcSym"></div></div>
+          <div class="lc-px"><b class="mono" id="lcPx">—</b> <i class="nr"></i> <span class="chg" id="lcChg">—</span></div>
+        </div>
+        <svg class="lc-svg" id="lcSvg" viewBox="0 0 600 220" preserveAspectRatio="none" aria-hidden="true">
+          <path class="lc-area" id="lcArea"></path>
+          <path class="lc-stroke" id="lcStroke"></path>
+          <circle class="lc-dot" id="lcDot" r="3.2"></circle>
+        </svg>
+        <div class="lc-foot">
+          <div><span>Volume total</span><b class="mono" id="lcVol">—</b> <i class="nr"></i></div>
+          <div><span>Progress</span><b class="mono" id="lcHold">—</b></div>
+          <a class="btn btn-primary btn-sm" id="lcGo" href="explore.html">Trade →</a>
+        </div>
+      </div>
+      <div class="live-list" id="liveList" role="list"><div class="empty" style="padding:20px">Loading launches…</div></div>
+    </div>
+    <div class="live-more"><a class="btn btn-ghost" href="explore.html">Explore all launches →</a></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <span class="mono">podclub.fun · fair launches on NEAR</span>
+    <nav class="foot-social" aria-label="Official channels">
+      <a href="https://x.com/PodclubDOTfun" target="_blank" rel="noopener noreferrer" data-social="x" aria-label="podclub.fun on X" title="podclub.fun on X">𝕏</a>
+      <a href="docs.html">Docs</a>
+    </nav>
+    <span>© 2026 · podclub.fun</span>
+  </div>
+</footer>
+<script src="api.js"></script>
+<script src="price.js"></script>
+<script>
+(function(){
+  var g=function(id){return document.getElementById(id);};
+  var list=g('liveList'); if(!list)return;
+  var YOCTO=1000000000000000000000000n;
+  function toNear(y){try{return Number(BigInt(y)/1000000000000000000n)/1e6;}catch(e){return 0;}}
+  function fmtPx(v){if(v==null||!isFinite(v))return '—';return v<0.01?v.toPrecision(3):v<1?v.toFixed(4):v.toLocaleString('en-US',{maximumFractionDigits:3});}
+  function fmtN(v,d){if(v==null||!isFinite(v))return '—';return v.toLocaleString('en-US',{maximumFractionDigits:d==null?0:d});}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+
+  var T=[],cur=0,W=600,H=220;
+  var stroke=g('lcStroke'),area=g('lcArea'),dot=g('lcDot');
+
+  function row(t,i){
+    var prog=((t.progress_bps||0)/100).toFixed(1);
+    return '<button class="lrow'+(i===0?' on':'')+'" data-i="'+i+'" role="listitem">'
+      +'<span class="tlogo">'+esc((t.symbol||'?').slice(0,1))+'</span>'
+      +'<span class="lr-id"><b>'+esc(t.name)+'</b><span class="tkn-sym mono">$'+esc(t.symbol)+'</span></span>'
+      +'<span class="lr-px mono">'+fmtPx(t.spot_price==null?null:parseFloat(t.spot_price))+' <i class="nr"></i></span>'
+      +'<span class="chg">'+prog+'%</span></button>';
+  }
+
+  // Plot the REAL constant-product bonding curve for this launch, not a random walk.
+  // On the curve k = (virtual_near + real_near) * token_reserve is invariant, so at any amount
+  // raised r the spot price is price(r) = (virtual_near + r)^2 / k. We draw price against r for
+  // r in [0, graduation_near] and mark the current raised amount. All inputs are on-chain.
+  function draw(){
+    var t=T[cur]; if(!t){return;}
+    var virt=toNear(t.virtual_near), real=toNear(t.real_near), res=toNear(t.token_reserve);
+    var grad=toNear(t.graduation_near);
+    var k=(virt+real)*res;
+    if(!(k>0)||!(grad>0)){stroke.setAttribute('d','');area.setAttribute('d','');dot.removeAttribute('cx');return;}
+    var N=64,pts=[],ys=[];
+    for(var i=0;i<N;i++){var r=grad*i/(N-1);var p=(virt+r)*(virt+r)/k;ys.push(p);}
+    var mn=Math.min.apply(null,ys),mx=Math.max.apply(null,ys),rng=(mx-mn)||1;
+    for(var j=0;j<N;j++){pts.push([j/(N-1)*W, H-6-((ys[j]-mn)/rng)*(H-16)]);}
+    var d=pts.map(function(p,i){return (i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1);}).join(' ');
+    stroke.setAttribute('d',d); area.setAttribute('d',d+' L'+W+' '+H+' L0 '+H+' Z');
+    // current position marker
+    var frac=grad>0?Math.min(real/grad,1):0;
+    var cx=frac*W, curP=(virt+real)*(virt+real)/k, cy=H-6-((curP-mn)/rng)*(H-16);
+    dot.setAttribute('cx',cx.toFixed(1)); dot.setAttribute('cy',cy.toFixed(1));
+    stroke.style.stroke='var(--accent)'; dot.style.fill='var(--accent)'; area.style.fill='rgba(0,236,151,.12)';
+  }
+
+  function select(i){
+    cur=i; var t=T[i]; if(!t)return;
+    [].forEach.call(list.children,function(b){if(b.dataset)b.classList&&b.classList.toggle('on',+b.dataset.i===i);});
+    g('lcIc').textContent=(t.symbol||'?').slice(0,1);
+    g('lcName').textContent=t.name||''; g('lcSym').textContent='$'+(t.symbol||'');
+    var vol=t.volume_24h!=null?t.volume_24h:t.volume;
+    g('lcVol').textContent=fmtN(toNear(vol),0);
+    g('lcHold').textContent=((t.progress_bps||0)/100).toFixed(1)+'%';
+    g('lcGo').href='trade.html?t='+encodeURIComponent(t.token_id);
+    g('lcPx').textContent=fmtPx(t.spot_price==null?null:parseFloat(t.spot_price));
+    var chg=g('lcChg');
+    var usd=(window.FLPrice&&t.spot_price!=null)?FLPrice.nearToUsd(parseFloat(t.spot_price)):null;
+    chg.className='chg'; chg.textContent=usd!=null?usd:'—';
+    draw();
+  }
+
+  list.addEventListener('click',function(e){var b=e.target.closest('.lrow');if(b)select(+b.dataset.i);});
+  window.addEventListener('fl:price',function(){ if(T.length)select(cur); }); // refresh USD when a quote lands
+
+  (async function(){
+    try{
+      var all=await FLApi.launches();
+      // newest first, cap the homepage teaser at 6
+      all.sort(function(a,b){return Number(b.created_at||0)-Number(a.created_at||0);});
+      T=all.slice(0,6);
+      if(!T.length){ list.innerHTML='<div class="empty" style="padding:20px">No launches yet — <a href="create.html">be the first</a>.</div>'; return; }
+      list.innerHTML=T.map(row).join('');
+      select(0);
+    }catch(e){
+      list.innerHTML='<div class="empty" style="padding:20px">Couldn’t reach the network. Refresh to retry.</div>';
+    }
+  })();
+})();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

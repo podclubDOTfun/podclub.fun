@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Creator dashboard — podclub.fun</title>
+<meta name="description" content="Claim your creator fees and tune your fee split — buyback and holder rewards — for your NEAR launches." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html"><img class="logo-img" src="assets/podclub-mark-96.png" alt="" /> podclub.fun</a>
+    <div class="navlinks">
+      <a href="docs.html#lifecycle">How it works</a>
+      <a href="explore.html">Explore</a>
+      <a href="docs.html#trust">Why us</a>
+      <a href="dashboard.html">Dashboard</a>
+    </div>
+    <button class="btn btn-ghost" data-connect>Connect wallet</button>
+  </div>
+</nav>
+
+<main class="page">
+  <div class="wrap">
+
+    <div class="connect-gate" id="gate">
+      <div class="ic"><img src="assets/podclub-logo-header-96.png" alt="podclub.fun" style="height:48px;width:auto;filter:drop-shadow(0 0 14px var(--accent-glow))" /></div>
+      <h2>Creator dashboard</h2>
+      <p>Connect your NEAR wallet to see your launches and claim accrued fees. Fee splits are fixed at launch and shown read-only.</p>
+      <button class="btn btn-primary" data-connect>Connect wallet</button>
+    </div>
+
+    <div id="dash" style="display:none">
+      <div class="eyebrow">Creator dashboard</div>
+      <h2>Your launches</h2>
+      <p class="lead">You keep up to 100% of the creator fee. Split it across claimable wNEAR, auto-buyback &amp; burn, and holder rewards — all from the flat 1% trading fee.</p>
+
+      <div class="dash-grid">
+        <div class="dcard claim">
+          <div class="k">Claimable now</div>
+          <div class="big-n accent" id="dClaim">—</div>
+          <div class="sub-n" id="dClaimSub">creator-fee claim view not live on the router yet</div>
+          <button class="btn btn-primary" id="claimAll" style="width:100%;margin-top:16px" disabled>Claim all fees</button>
+        </div>
+        <div class="dcard">
+          <div class="k">Your launches</div>
+          <div class="big-n" id="dCount">—</div>
+          <div class="sub-n">created by you</div>
+        </div>
+        <div class="dcard">
+          <div class="k">Total raised</div>
+          <div class="big-n" id="dRaised">—<span class="u"><i class="nr"></i></span></div>
+          <div class="sub-n">across your launches</div>
+        </div>
+        <div class="dcard">
+          <div class="k">Total volume</div>
+          <div class="big-n" id="dVol">—<span class="u"><i class="nr"></i></span></div>
+          <div class="sub-n">lifetime, on-curve</div>
+        </div>
+      </div>
+
+      <div class="holdings" id="holdings">
+        <div class="hrow head">
+          <div>Token</div><div>Price</div><div>Progress</div><div class="hide-sm">Phase</div><div class="hide-sm">Volume</div><div>Claimable</div><div></div>
+        </div>
+      </div>
+      <div class="note" id="dashNote"></div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span class="mono">podclub.fun · fair launches on NEAR</span>
+    <nav class="foot-social" aria-label="Official channels">
+      <a href="https://x.com/PodclubDOTfun" target="_blank" rel="noopener noreferrer" data-social="x" aria-label="podclub.fun on X" title="podclub.fun on X">𝕏</a>
+      <a href="docs.html">Docs</a>
+    </nav>
+    <span>© 2026 · podclub.fun</span>
+  </div>
+</footer>
+<script type="module" src="wallet.js"></script>
+<script src="api.js"></script>
+<script src="price.js"></script>
+<script src="dashboard.js"></script>
+<script src="nav.js"></script>
+</body>
+</html>
