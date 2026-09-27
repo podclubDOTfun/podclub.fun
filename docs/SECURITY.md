@@ -88,8 +88,7 @@ the per-share accumulator; queue promotion is pure FIFO by timestamp.
 
 ## 5. Frontend / operational
 - **No secrets in frontend or repo.** `web/wallet.js` holds only public config (network,
-  contract id, public RPC URL). Beta access codes live in a Cloudflare env secret consumed
-  by `_worker.js` (not a financial control).
+  contract id, public RPC URL). The site is served as a public static app (no access gate).
 - **No mocks for financial data.** Any UI figure that cannot yet be read from chain is
   marked INCOMPLETE rather than faked.
 - **Testnet only** for now. Mainnet deploy, DNS, and fund movement require credentials not yet provisioned.

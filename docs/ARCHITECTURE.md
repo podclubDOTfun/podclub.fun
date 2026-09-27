@@ -38,7 +38,7 @@ The product is currently branded "podclub.fun" in code — rebrand is deferred.
    │  │ (static    │◄──┤ /api/* read endpoints│ │
    │  │  web/)     │   │  backed by KV/D1     │ │
    │  └───────────┘   └──────────────────────┘ │
-   │      ▲ beta-gate _worker.js (LIVE)         │
+   │      ▲ public static site (no gate)        │
    └──────┼─────────────────────────────────────┘
           │ browser
         Trader
@@ -156,7 +156,7 @@ can never touch funds or lock users out of their own balances.
 
 ## 6. DevOps
 - **Hosting: Cloudflare** (Pages static site + Worker read-path) + current registrar. The
-  `infra/` AWS Terraform is **legacy/parked** — not applied; the live gate is
-  `web/_worker.js` (beta access code). DNS/domain must not change.
+  `infra/` AWS Terraform is **legacy/parked** — not applied. The site is served publicly as
+  a static app (no access gate). DNS/domain must not change.
 - **Build:** `scripts/ec2-build-bootstrap.sh` installs rustup + wasm32 + cargo-near +
   near-cli. `cargo test` for unit tests; `cargo near build` for reproducible wasm.
