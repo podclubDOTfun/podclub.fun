@@ -150,6 +150,7 @@
     <span>© 2026 · podclub.fun</span>
   </div>
 </footer>
+<script src="config.testnet.js"></script>
 <script type="module" src="wallet.js"></script>
 <script src="api.js"></script>
 <script src="price.js"></script>
@@ -275,10 +276,68 @@
   var btn=g('swapBtn'),msg=g('swapMsg');
   function refresh(){ btn.textContent = (window.FLWallet&&FLWallet.get()) ? 'Swap' : 'Connect wallet to swap'; }
   window.addEventListener('fl:wallet',refresh); refresh();
-  btn.addEventListener('click',function(){
+
+  function showMsg(t,bad){ msg.style.display='flex'; msg.classList.toggle('bad',!!bad); msg.innerHTML=t; }
+  function busy(on){ btn.disabled=!!on; btn.textContent=on?'Confirm in wallet…':((window.FLWallet&&FLWallet.get())?'Swap':'Connect wallet to swap'); }
+  // out_yocto · (1 − slip) as a BigInt yocto string — slippage floor for min_out (never the display float).
+  function minOutYocto(qYocto){ try{ var q=BigInt(qYocto); var bps=BigInt(Math.round(SLIP*100)); return (q*(10000n-bps)/10000n).toString(); }catch(e){ return '0'; } }
+  // Is `acct` storage-registered on wNEAR? (sell payout / claim need it.)
+  async function wnearRegistered(acct){ try{ return !!(await FLWallet.viewOn(FLWallet.WNEAR_ID,'storage_balance_of',{account_id:acct})); }catch(e){ return false; } }
+  // Is `acct` storage-registered on a launch-token FT? (buy delivery needs it — the router's
+  // ft_transfer to the buyer panics + rolls the buy back if the buyer isn't registered.)
+  async function tokenRegistered(tokenId,acct){ try{ return !!(await FLWallet.viewOn(tokenId,'storage_balance_of',{account_id:acct})); }catch(e){ return false; } }
+
+  async function doBuy(acct){
+    var human=parseFloat(g('fromAmt').value)||0; if(!(human>0)){ showMsg('Enter an amount to buy.',1); return; }
+    var amtYocto=toYocto(human);
+    // The buyer must be registered on the LAUNCH TOKEN before delivery (own tx — different receiver
+    // than wNEAR). One-time per token; skipped once registered.
+    if(!(await tokenRegistered(L.token_id,acct))){
+      showMsg('Registering you on $'+esc((L&&L.symbol)||'')+' (one-time)…');
+      await FLWallet.signAndCallOn(L.token_id,'storage_deposit',{account_id:acct},'1250000000000000000000','30000000000000');
+    }
+    var q=await FLApi.quoteBuy(L.token_id,amtYocto); var minOut=minOutYocto(q&&q.toString?q.toString():q);
+    // Single tx on wNEAR: register self (idempotent) → wrap NEAR→wNEAR → ft_transfer_call to the router.
+    var wmsg=JSON.stringify({token_id:L.token_id,min_out:minOut,dev_buy:false});
+    busy(true);
+    var r=await FLWallet.signAndBatch(FLWallet.WNEAR_ID,[
+      {methodName:'storage_deposit',args:{account_id:acct},deposit:'1250000000000000000000'},           // 0.00125 NEAR
+      {methodName:'near_deposit',args:{},deposit:amtYocto},                                              // wrap NEAR→wNEAR
+      {methodName:'ft_transfer_call',args:{receiver_id:FLWallet.CONTRACT_ID,amount:amtYocto,msg:wmsg},
+        deposit:'1',gas:'120000000000000'}
+    ]);
+    return r;
+  }
+  async function doSell(acct){
+    var human=parseFloat(g('fromAmt').value)||0; if(!(human>0)){ showMsg('Enter an amount to sell.',1); return; }
+    var amtYocto=toYocto(human);
+    var q=await FLApi.quoteSell(L.token_id,amtYocto); var minOut=minOutYocto(q&&q.toString?q.toString():q);
+    // Seller is paid in wNEAR → must be registered on wNEAR first (own tx; ft_transfer_call has one receiver).
+    if(!(await wnearRegistered(acct))){
+      showMsg('Registering you on wNEAR (one-time)…');
+      await FLWallet.signAndCallOn(FLWallet.WNEAR_ID,'storage_deposit',{account_id:acct},'1250000000000000000000','30000000000000');
+    }
+    var tmsg=JSON.stringify({action:'sell',min_out:minOut});
+    busy(true);
+    var r=await FLWallet.signAndCallOn(L.token_id,'ft_transfer_call',
+      {receiver_id:FLWallet.CONTRACT_ID,amount:amtYocto,msg:tmsg},'1','120000000000000');
+    return r;
+  }
+
+  btn.addEventListener('click',async function(){
     if(!(window.FLWallet&&FLWallet.get())){FLWallet.open();return;}
-    msg.style.display='flex';
-    msg.textContent='Preview is live from the curve. Signing is not wired yet — next: wallet-selector → '+(side==='buy'?'router.buy(token_id, min_out) with attached wNEAR':'ft_transfer_call(token, quote_sell → min_out)')+'.';
+    var acct=FLWallet.get().acct;
+    msg.classList.remove('bad');
+    try{
+      var r=await (side==='buy'?doBuy(acct):doSell(acct));
+      // Injected wallets (Meteor/Nightly) resolve here with the outcome; redirect wallets already navigated.
+      var tx=r&&r.transaction&&r.transaction.hash;
+      showMsg(tx?('Swap sent — <a href="'+((FLWallet.NETWORK==='mainnet')?'https://nearblocks.io':'https://testnet.nearblocks.io')+'/txns/'+tx+'" target="_blank" rel="noopener">'+tx.slice(0,10)+'… ↗</a>'):'Swap submitted.');
+      g('fromAmt').value='';g('toAmt').value='';
+      try{ L=await FLApi.launch(L.token_id); renderInfo(); }catch(e){}
+    }catch(e){
+      showMsg((e&&e.message)?('Swap failed: '+esc(e.message)):'Swap cancelled or failed.',1);
+    }finally{ busy(false); }
   });
 
   (async function(){

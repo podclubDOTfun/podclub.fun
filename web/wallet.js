@@ -22,6 +22,9 @@ export const NETWORK = 'testnet';
 export const CONTRACT_ID = (typeof window !== 'undefined' && window.FL_CONTRACT_ID) || 'flpad-28720.testnet';
 // FastNEAR public testnet RPC (rpc.testnet.near.org is deprecated).
 export const RPC_URL = (typeof window !== 'undefined' && window.FL_RPC_URL) || 'https://test.rpc.fastnear.com';
+// wNEAR (wrapped NEAR) token id — the curve settles trades in wNEAR and all fee/reward payouts are
+// wNEAR. testnet = wrap.testnet, mainnet = wrap.near. Buys wrap NEAR→wNEAR here before the swap.
+export const WNEAR_ID = NETWORK === 'mainnet' ? 'wrap.near' : 'wrap.testnet';
 
 var SVG={
   meteor:'<svg viewBox="0 0 24 24" fill="#DE4F4F"><path d="M0 .234l21.912 20.537s.412.575-.124 1.151c-.535.576-1.236.083-1.236.083L0 .234zm6.508 2.058l17.01 15.638s.413.576-.123 1.152c-.534.576-1.235.083-1.235.083L6.508 2.292zM1.936 6.696l17.01 15.638s.412.576-.123 1.152-1.235.082-1.235.082L1.936 6.696zm10.073-2.635l11.886 10.927s.287.401-.087.805-.863.058-.863.058L12.009 4.061zm-8.567 7.737l11.886 10.926s.285.4-.088.803c-.375.403-.863.059-.863.059L3.442 11.798zm14.187-5.185l5.426 4.955s.142.188-.044.377c-.185.188-.428.027-.428.027l-4.954-5.358v-.001zM6.178 17.231l5.425 4.956s.144.188-.042.377-.427.026-.427.026l-4.956-5.359z"/></svg>',
@@ -60,23 +63,42 @@ function account(){
   var a=(st.accounts||[]).filter(function(x){return x.active})[0]||(st.accounts||[])[0];
   return a?a.accountId:null;
 }
-// Read-only view call straight to RPC — no wallet, no dependency.
-async function view(method,args){
+// Read-only view call straight to RPC — no wallet, no dependency. Defaults to the router; pass an
+// explicit accountId to read another contract (launch token FT, wrap.testnet, …).
+async function viewOn(accountId,method,args){
   var res=await fetch(RPC_URL,{method:'POST',headers:{'content-type':'application/json'},
     body:JSON.stringify({jsonrpc:'2.0',id:'v',method:'query',params:{request_type:'call_function',
-      finality:'final',account_id:CONTRACT_ID,method_name:method,args_base64:btoa(JSON.stringify(args||{}))}})});
+      finality:'final',account_id:accountId,method_name:method,args_base64:btoa(JSON.stringify(args||{}))}})});
   var j=await res.json();
   if(j.error) throw new Error(j.error.data||j.error.message||'rpc error');
   if(j.result&&j.result.error) throw new Error(j.result.error);
   var str=new TextDecoder().decode(new Uint8Array(j.result.result));
   return str?JSON.parse(str):null;
 }
-// Signed change call (needs a connected wallet).
+async function view(method,args){ return viewOn(CONTRACT_ID,method,args); }
+// Signed change call to the router (needs a connected wallet).
 async function signAndCall(method,args,deposit,gas){
+  return signAndCallOn(CONTRACT_ID,method,args,deposit,gas);
+}
+// Signed change call to an ARBITRARY receiver (needs a connected wallet). BUY targets wrap.testnet
+// (wNEAR ft_transfer_call → router) and SELL targets the launch-token contract (ft_transfer_call →
+// router); create/claim keep the router-targeted signAndCall path. Redirect wallets (MyNEAR/HOT)
+// navigate away here and return to the same page — callers refresh balances/quote on return.
+async function signAndCallOn(receiverId,method,args,deposit,gas){
   var s=await selector(); var w=await s.wallet();
-  return w.signAndSendTransaction({ receiverId:CONTRACT_ID,
+  return w.signAndSendTransaction({ receiverId:receiverId,
     actions:[{type:'FunctionCall',params:{methodName:method,args:args||{},
       gas:gas||'30000000000000', deposit:deposit||'0'}}] });
+}
+// Sign a SEQUENCE of function-call actions against ONE receiver, atomically in a single tx (used to
+// batch wNEAR storage_deposit + near_deposit + ft_transfer_call for BUY). Each step is
+// {methodName,args,deposit,gas}.
+async function signAndBatch(receiverId,steps){
+  var s=await selector(); var w=await s.wallet();
+  return w.signAndSendTransaction({ receiverId:receiverId,
+    actions:steps.map(function(st){ return {type:'FunctionCall',params:{
+      methodName:st.methodName, args:st.args||{},
+      gas:st.gas||'30000000000000', deposit:st.deposit||'0' }}; }) });
 }
 // ---- modal (same markup as the shipped design) ----
 var modal;
@@ -148,7 +170,9 @@ document.addEventListener('click',function(e){
 
 window.FLWallet={open:open,disconnect:disconnect,
   get:function(){var a=account();return a?{acct:a}:null;},
-  signAndCall:signAndCall,view:view,CONTRACT_ID:CONTRACT_ID,NETWORK:NETWORK};
+  signAndCall:signAndCall,signAndCallOn:signAndCallOn,signAndBatch:signAndBatch,
+  view:view,viewOn:viewOn,
+  CONTRACT_ID:CONTRACT_ID,WNEAR_ID:WNEAR_ID,NETWORK:NETWORK,RPC_URL:RPC_URL};
 
 // Init on load so a redirect-return (MyNEAR / HOT) is captured and the nav reflects it.
 selector().then(apply).catch(function(e){ _initErr=e; console.error('[FLWallet] init failed',e); });
