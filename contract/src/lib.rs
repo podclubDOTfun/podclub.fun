@@ -86,7 +86,7 @@ const LAUNCH_SUPPLY: u128 = 1_000_000_000 * 1_000_000_000_000_000_000_000_000; /
 /// Real-wNEAR threshold that opens `graduate`, in yocto. TIER-INDEPENDENT (identical for Basic and
 /// Express). Documented in ECONOMICS.md; a contract-level constant (not a per-call arg) so
 /// economics can't be invented ad hoc.
-const LAUNCH_GRADUATION_NEAR: u128 = 5_000 * 1_000_000_000_000_000_000_000_000; // 5000 wNEAR
+const LAUNCH_GRADUATION_NEAR: u128 = 2_400 * 1_000_000_000_000_000_000_000_000; // 2400 wNEAR (~$12k @ NEAR $5)
 /// Tiered launch fee, attached by the creator on `create_launch`. The creator attaches ONLY the
 /// tier fee (no separate deploy deposit on top); the router funds the token deploy out of it and
 /// forwards the margin (`tier_fee − FT_DEPLOY_DEPOSIT`) to the treasury on success. Set by
@@ -817,7 +817,7 @@ impl Contract {
 
     /// Owner-only test-enablement knob: adjust a specific launch's graduation threshold before it
     /// graduates. The mainnet economics are unchanged — `create_launch` still seeds every launch at
-    /// `LAUNCH_GRADUATION_NEAR` (5000 wNEAR); this only lets the owner retune a single launch (e.g.
+    /// `LAUNCH_GRADUATION_NEAR` (2400 wNEAR); this only lets the owner retune a single launch (e.g.
     /// to exercise the full graduate → seed_pool path on testnet with faucet funds). Rejected once
     /// the launch has left the curve (Graduated/Pooling/Pooled), so it can never move the goalposts
     /// on an already-closed curve.

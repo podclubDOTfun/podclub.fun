@@ -89,7 +89,7 @@ See §5 for the holder-rewards, buyback, and express-queue designs.
    remainder. Failed payout returns the tokens (`on_sell_payout`).
 3. **Fee split:** every fee → 10% protocol (immutable) + 90% pool, pool split by the
    launch's immutable `FeeSplit` into `creator` / `buyback` / `holder` accrual buckets.
-4. **Graduation:** at 5000 real wNEAR anyone may `graduate` (freezes the curve, moves no
+4. **Graduation:** at 2400 real wNEAR anyone may `graduate` (freezes the curve, moves no
    funds). Owner then `seed_pool`s the leftover tokens into a **locked** single-sided DCL
    position (LP NFT held by the router, no remove path).
 

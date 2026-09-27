@@ -28,7 +28,7 @@ market cap (`virtual_near`), which is now set **per launch** by the caller.
 | Virtual NEAR reserve | per launch (`virtual_near` arg) | opening MCAP/FDV == `virtual_near` (100% supply on curve); Basic ≈ $4k, Express ≈ $10k, converted to wNEAR at the live NEAR price by the frontend. Contract is USD-agnostic. |
 | Token reserve (initial) | full supply | seeded from router-owned supply in `on_ft_deployed` |
 | Curve | `x·y = k` | `mul_div` / `tokens_out` / `near_out` with u256 intermediates |
-| Graduation threshold | 5,000 wNEAR | `LAUNCH_GRADUATION_NEAR` — TIER-INDEPENDENT, permissionless `graduate()` |
+| Graduation threshold | 2,400 wNEAR (~$12k @ NEAR $5) | `LAUNCH_GRADUATION_NEAR` — TIER-INDEPENDENT, permissionless `graduate()` |
 | Dev-buy cap | 4% | `DEV_BUY_CAP_BPS = 400` |
 
 ## Launch fee (tiered, real on-chain transfer)

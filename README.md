@@ -34,7 +34,7 @@ changed after they buy.
    sets the opening valuation (Basic ≈ $4k, Express ≈ $10k FDV). No presale, no pre-mint to a team.
 2. **Trade on the curve** — anyone can buy and sell against the curve immediately. Every trade pays
    the flat 1% fee, routed to the creator's chosen split.
-3. **Graduate** — once a launch accumulates **5,000 wNEAR** of real liquidity, `graduate`
+3. **Graduate** — once a launch accumulates **2,400 wNEAR (≈ $12k)** of real liquidity, `graduate`
    (permissionless — anyone can call it) closes the curve.
 4. **Rhea DCL pool** — the graduated launch is seeded into a **permanent Rhea DCL**
    concentrated-liquidity pool, where it trades from then on.

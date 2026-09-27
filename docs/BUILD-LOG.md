@@ -4,6 +4,27 @@ Running log of executed build briefs. Newest first.
 
 ---
 
+## 2026-09-27 — Graduation threshold 5000 → 2400 wNEAR
+
+Brief: `BRIEF-graduation-threshold-2400.md`. Owner-chosen FIXED wNEAR constant (declined oracle / USD-peg). Contract logic otherwise unchanged.
+
+- `contract/src/lib.rs:89` — `LAUNCH_GRADUATION_NEAR` 5_000 → **2_400** ×1e24; comment `// 2400 wNEAR (~$12k @ NEAR $5)`. Also fixed the `set_graduation_near` doc comment (L820) "5000 wNEAR" → "2400 wNEAR". Public create path (`record_launch`, L776) already passes the constant, so new public launches auto-inherit 2400. Other `5_000`/`5000` in lib.rs are independent test literals (virtual_near, buy amounts) — left as-is per brief.
+- Docs (same commit): `docs/ROADMAP.md:12`, `docs/ARCHITECTURE.md:92`, `docs/ECONOMICS.md:31`, `README.md:37` → 2,400 (README/ECONOMICS note ≈ $12k). No `$25k` mention existed.
+
+### Acceptance (live testnet, stable router `podclubfun.testnet`)
+1. `cargo test` — green (106 + 10 passed, 0 failed).
+2. Rebuilt wasm (`cargo build --target wasm32-unknown-unknown --release` + `wasm-opt -Oz`), redeployed to stable router. Deploy tx `5C3SaVkDxHAZGKA5HQRPgPiPntZKAzvbLyzB9eeUf3p8`.
+3. **Constant default = 2400** — public create path: `grad.podclubfun.testnet` (creator `pdc-b1-bob-e5c249.testnet`, create tx `5pjbNKuiRJGqG9rTYZ4HmRV87JXGtPygcwKaJfDdu9mD`); `get_launch.graduation_near` = `2400000000000000000000000000` = 2400×1e24. ✓
+4. **graduate gate** (QA-shortcut threshold 3 wNEAR on `pod2.podclubfun.testnet` via `set_graduation_near`, tx `JE5CSpairkpzfG8sAzeYFjs2CzbqurGggWVtyEEmztEv`, per brief):
+   - BELOW (real_near 0 < 3): `graduate` **rejected** ("graduation threshold not reached"); pod2 stayed `Live`. (near-cli-rs surfaced the require! failure as a wasm-trap and did not print the failed-tx hash; reject verified by unchanged on-chain state.)
+   - AT/ABOVE: bob bought 4 wNEAR (tx `8hFXeA89UXaJZbJH5XCFBSTd2HL6ZMKmuCK33GJzCa6Z`) → real_near 3.96 ≥ 3; `graduate` **succeeded** (tx `Dz7PYsYRfJ6wiRUJveNX3azEcb2KEQVsgfG1J5UE1KEo`), pod2 → `Graduated`. ✓
+
+### Notes for owner
+- The QA proof graduated `pod2.podclubfun.testnet` (one of the two seed launches) — it is now `Graduated`, not Live. `pod1.podclubfun.testnet` remains Live; `grad.podclubfun.testnet` is a fresh Seeding launch. Re-seed a Live launch if Explore/Trade needs two.
+- Committed on `master`, NOT pushed. No mainnet. No keys committed. `res/fastlaunch_router.wasm` refreshed to the deployed build.
+
+---
+
 ## 2026-09-27 — Web write-path wiring (buy / sell / creator-claim / holder-claim) on stable testnet
 
 Brief: `/tmp/BRIEF-web-writepath-wiring.md`. Wiring only — no contract logic changed.

@@ -9,7 +9,7 @@ Legend: ✅ done & tested · 🟡 partial · ⬜ not started · 🔒 needs testn
 ## Accepted design decisions (2026-09-25, fee + naming updated 2026-09-26)
 1. **Express differs by opening market cap + visibility + fee** (SUPERSEDES the earlier "Express is
    decoupled from price / visibility-only" decision — revised 2026-09-25). Both tiers share the SAME curve shape, supply, and
-   5,000-wNEAR graduation threshold. The launch fee is **tiered**: **Basic 0.18 / Express 0.35 NEAR** — the earlier flat
+   2,400-wNEAR graduation threshold. The launch fee is **tiered**: **Basic 0.18 / Express 0.35 NEAR** — the earlier flat
    0.18 is superseded. Express differs in: a higher opening MCAP (its per-launch `virtual_near`
    targets ~$10k FDV vs Basic's ~$4k), Premium Board visibility, and the molten EXPRESS badge.
    `virtual_near` is a per-launch argument (opening MCAP == FDV, since 100% of supply is on the
